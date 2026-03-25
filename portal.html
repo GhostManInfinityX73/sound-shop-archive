@@ -5,158 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sound Shop | Entertainment Portal</title>
     <style>
-        :root { --teal: #00ffcc; --dark: #0a0a0a; --glass: rgba(255, 255, 255, 0.08); }
+        :root { 
+            --teal: #00ffcc; 
+            --dark: #0a0a0a; 
+            --bolt-white: #ffffff; 
+            --sky-blue: #00d2ff; 
+        }
         
         body { 
             background-color: var(--dark); color: #fff; 
             font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; text-align: center; 
-            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=2000');
+            background-image: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.95)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000');
             background-size: cover; background-attachment: fixed;
         }
 
-        /* Master Navigation - Same as Index */
-        nav { width: 100%; display: flex; justify-content: space-around; padding: 20px 0; background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0, 255, 204, 0.2); backdrop-filter: blur(10px); align-items: center; }
-        .nav-links { display: flex; align-items: center; }
-        .nav-links a { color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; margin: 0 10px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.7; transition: 0.3s; }
-        .nav-links a:hover { opacity: 1; color: var(--teal); }
-        .lounge-link { border: 1px solid rgba(0, 255, 204, 0.3); padding: 4px 8px; border-radius: 4px; color: var(--teal) !important; opacity: 1 !important; }
+        nav { width: 100%; display: flex; justify-content: space-around; padding: 20px 0; background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0, 255, 204, 0.2); backdrop-filter: blur(10px); }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; margin: 0 10px; text-transform: uppercase; }
 
-        h1 { font-size: 2.5rem; font-style: italic; margin: 40px 0 10px 0; text-transform: uppercase; letter-spacing: 5px; color: #fff; }
-        .sub-header { color: var(--teal); letter-spacing: 4px; font-weight: 300; margin-bottom: 40px; text-transform: uppercase; font-size: 0.8rem; }
-
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; padding: 0 5%; max-width: 1200px; margin: 0 auto 100px auto; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; padding: 20px; max-width: 1300px; margin: 0 auto; }
         
         .portal-card { 
-            background: var(--glass); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 25px; border-radius: 20px; backdrop-filter: blur(15px);
-            display: flex; flex-direction: column; transition: 0.4s ease;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 20px; border-radius: 20px; backdrop-filter: blur(15px);
+            display: flex; flex-direction: column;
         }
-        .portal-card:hover { border-color: var(--teal); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 255, 204, 0.1); }
 
-        /* Video Teaser UI */
-        .video-teaser-box {
-            position: relative; width: 100%; height: 180px; 
-            background-size: cover; background-position: center;
-            border-radius: 12px; cursor: pointer; overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
-            border: 1px solid rgba(0, 255, 204, 0.2);
+        /* --- ARCADE TERMINAL --- */
+        .emulator-container { 
+            width: 100%; height: 350px; background-color: #000;
+            border-radius: 12px; overflow: hidden; position: relative; border: 2px solid #333; 
+        }
+
+        /* --- WHITE ELECTRICAL STATIC (3x THICKER) --- */
+        .lightning-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 500;
+            background: repeating-linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+        }
+
+        .bolt {
+            position: absolute; left: -10%; width: 120%; 
+            background: #ffffff; /* PURE WHITE */
+            box-shadow: 0 0 20px #fff, 0 0 40px #fff, 0 0 60px rgba(255,255,255,0.5);
+            opacity: 0;
+            clip-path: polygon(0% 50%, 5% 0%, 15% 100%, 25% 10%, 35% 90%, 45% 0%, 55% 100%, 65% 20%, 75% 85%, 85% 5%, 95% 100%, 100% 50%);
+            animation: flow-down 3s infinite linear;
+        }
+
+        /* Thicker Heights */
+        .bolt-1 { height: 12px; animation-delay: 0s; }
+        .bolt-2 { height: 18px; animation-delay: 1s; animation-duration: 2s; }
+        .bolt-3 { height: 10px; animation-delay: 2s; animation-duration: 4s; }
+
+        @keyframes flow-down {
+            0% { transform: translateY(-50px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(400px); opacity: 0; }
+        }
+
+        #game-screen { 
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            display: flex; align-items: center; justify-content: center; z-index: 10;
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1511882150382-421056c89033?q=80&w=1000');
+            background-size: cover;
+        }
+
+        .terminal-text {
+            color: var(--teal); font-size: 0.85rem; font-weight: bold; font-family: 'Courier New', monospace;
+            z-index: 600; padding: 12px; background: rgba(0,0,0,0.9);
+            border: 1px solid var(--teal); text-transform: uppercase;
+            box-shadow: 0 0 15px var(--teal);
+        }
+
+        /* --- RESTORED SCROLLING MENU --- */
+        .game-menu { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px; 
+            margin-top: 15px; height: 180px; overflow-y: scroll; padding: 5px;
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
         }
         
-        .play-trigger {
-            width: 50px; height: 50px; background: rgba(0, 255, 204, 0.2); border: 2px solid var(--teal);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 20px var(--teal); animation: pulse 2s infinite;
-        }
-        .play-trigger::after {
-            content: ''; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent;
-            border-left: 14px solid var(--teal); margin-left: 4px;
-        }
+        .game-menu::-webkit-scrollbar { width: 8px; }
+        .game-menu::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .game-menu::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 10px; }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 255, 204, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+        .game-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(0, 255, 204, 0.3); color: #fff; padding: 10px; border-radius: 4px; font-size: 0.65rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        .game-btn:hover { background: var(--teal); color: #000; box-shadow: 0 0 10px var(--teal); }
+
+        /* --- VIDEO / CONTENT BOXES --- */
+        .content-box {
+            width: 100%; aspect-ratio: 16/9; background: #111; border-radius: 10px;
+            border: 1px solid #333; overflow: hidden;
         }
-
-        .btn { 
-            background: #fff; color: #000; padding: 12px; border-radius: 8px;
-            text-decoration: none; font-weight: 900; margin-top: 15px; 
-            cursor: pointer; border: none; text-transform: uppercase; font-size: 0.8rem;
-            transition: 0.3s;
-        }
-        .btn:hover { background: var(--teal); transform: scale(1.02); }
-
-        .reward-alert { display: none; background: var(--teal); color: #000; padding: 15px; margin-top: 15px; font-weight: 900; border-radius: 8px; font-size: 0.8rem; }
-
-        /* Social Row */
-        .social-row { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
-        .social-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.7rem; transition: 0.3s; }
-        .social-btn:hover { border-color: var(--teal); color: var(--teal); background: rgba(0, 255, 204, 0.05); }
-
-        /* Toast UI */
-        #toast {
-            visibility: hidden; min-width: 250px; background-color: var(--teal); color: #000; text-align: center;
-            border-radius: 50px; padding: 16px; position: fixed; z-index: 3000; bottom: 30px; left: 50%;
-            transform: translateX(-50%); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
-        }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body>
 
     <nav>
-        <div style="color: var(--teal); font-weight: 900; font-style: italic; letter-spacing: 1px; font-size: 0.9rem;">SOUND SHOP.</div>
+        <div style="color: var(--teal); font-weight: 900; font-style: italic;">SOUND SHOP.</div>
         <div class="nav-links">
             <a href="index.html">HOME</a>
-            <a href="catalog.html">BEATS</a>
-            <a href="shop.html">GEAR</a>
-            <a href="portal.html" class="lounge-link">LOUNGE</a>
+            <a href="portal.html" style="color: var(--teal);">LOUNGE</a>
         </div>
     </nav>
 
-    <h1>SOUND SHOP PORTAL</h1>
-    <p class="sub-header">Good Business is all we do. Play. Watch. Earn.</p>
+    <h1 style="font-size: 2rem; margin: 30px 0; letter-spacing: 3px;">ENTERTAINMENT PORTAL</h1>
 
     <div class="grid-container">
         
         <div class="portal-card">
-            <h3 style="color: var(--teal); margin-top: 0;">THE CINEMA LOUNGE</h3>
-            <p style="font-size: 0.9rem; color: #ccc;">Go "In the Lab" with 25 years of industry experience.</p>
-            
-            <div class="video-teaser-box" style="background-image: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800');" onclick="showToast('Content Unlocking...')">
-                <div class="play-trigger"></div>
+            <h3 style="color: var(--teal); margin-top: 0;">ARCADE TERMINAL</h3>
+            <div class="emulator-container">
+                <div class="lightning-container">
+                    <div class="bolt bolt-1"></div>
+                    <div class="bolt bolt-2"></div>
+                    <div class="bolt bolt-3"></div>
+                </div>
+                <div id="game-screen">
+                    <div class="terminal-text">[ SYSTEM INITIALIZED ]</div>
+                </div>
             </div>
             
-            <p style="font-size: 0.7rem; color: #888; margin-top: 10px; font-style: italic;">Now Streaming: The Art of the Cinematic Build</p>
-            <button class="btn" onclick="showToast('Session Loading...')">Unlock Full Session</button>
+            <div class="game-menu">
+                <button class="game-btn">Pac-Man</button>
+                <button class="game-btn">Galaga</button>
+                <button class="game-btn">Donkey Kong</button>
+                <button class="game-btn">Street Fighter II</button>
+                <button class="game-btn">Dig Dug</button>
+                <button class="game-btn">Popeye</button>
+                <button class="game-btn">Centipede</button>
+                <button class="game-btn">Q*Bert</button>
+                <button class="game-btn">Frogger</button>
+                <button class="game-btn">Ms. Pac-Man</button>
+            </div>
         </div>
 
         <div class="portal-card">
-            <h3 style="color: var(--teal); margin-top: 0;">SOUND SHOP ARCADE</h3>
-            <p style="font-size: 0.9rem; color: #ccc;">Beat the High Score. Get the Merch Discount.</p>
-            <div style="height: 180px; background: #000; border: 1px solid #222; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                <p style="color: #444; font-size: 0.7rem; letter-spacing: 3px;">[ RETRO ENGINE IDLE ]</p>
+            <h3 style="color: var(--teal); margin-top: 0;">CINEMA LOUNGE</h3>
+            <div class="content-box">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
             </div>
-            <button class="btn" onclick="showReward()">PLAY TO WIN</button>
-            <div id="reward" class="reward-alert">CLAIMED: 10% OFF MERCH! <br>CODE: SOUND10</div>
+            <p style="font-size: 0.8rem; color: #aaa; margin-top: 15px;">Experience the latest cinematic instrumental showcases and studio sessions.</p>
+            <button class="game-btn" style="margin-top: auto;">VIEW FULL PLAYLIST</button>
         </div>
 
         <div class="portal-card">
-            <h3 style="color: var(--teal); margin-top: 0;">THE GUEST LIST</h3>
-            <p style="font-size: 0.9rem; color: #ccc;">Community Vibes & Producer Spotlights.</p>
-            
-            <div class="video-teaser-box" style="background-image: url('https://images.unsplash.com/photo-1571235962067-152f5239a06e?q=80&w=800');" onclick="showToast('Loading Spotlight...')">
-                <div class="play-trigger"></div>
-            </div>
-
-            <p style="font-size: 0.7rem; color: #888; margin-top: 10px; font-style: italic;">Community Spotlight: Next-Gen Rhythm & Soul</p>
-            
-            <div class="social-row">
-                <a href="https://x.com" target="_blank" class="social-btn" onclick="showToast('Opening X...')">X</a>
-                <a href="https://instagram.com" target="_blank" class="social-btn" onclick="showToast('Opening IG...')">IG</a>
-                <a href="https://facebook.com" target="_blank" class="social-btn" onclick="showToast('Opening FB...')">FB</a>
-            </div>
+            <h3 style="color: var(--teal); margin-top: 0;">SPOTLIGHT</h3>
+            <div class="content-box" style="background: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1000') center/cover;">
+                </div>
+            <p style="font-size: 0.8rem; color: #aaa; margin-top: 15px;">Monthly feature highlighting independent producers and Sound Shop gear users.</p>
+            <button class="game-btn" style="margin-top: auto;">SUBMIT YOUR TRACK</button>
         </div>
 
     </div>
 
-    <div id="toast">Opportunity Unlocked!</div>
-
-    <script>
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            toast.innerText = message;
-            toast.className = "show";
-            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
-        }
-
-        function showReward() {
-            document.getElementById('reward').style.display = 'block';
-            showToast('Arcade Reward Claimed!');
-        }
-    </script>
-
 </body>
 </html>
+
+
+
+
+
