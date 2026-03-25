@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sound Shop | Entertainment Portal</title>
+    <style>
+        :root { --teal: #00ffcc; --dark: #0a0a0a; --glass: rgba(255, 255, 255, 0.08); }
+        
+        body { 
+            background-color: var(--dark); color: #fff; 
+            font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; text-align: center; 
+            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover; background-attachment: fixed;
+        }
+
+        /* Master Navigation - Same as Index */
+        nav { width: 100%; display: flex; justify-content: space-around; padding: 20px 0; background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0, 255, 204, 0.2); backdrop-filter: blur(10px); align-items: center; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; margin: 0 10px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.7; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--teal); }
+        .lounge-link { border: 1px solid rgba(0, 255, 204, 0.3); padding: 4px 8px; border-radius: 4px; color: var(--teal) !important; opacity: 1 !important; }
+
+        h1 { font-size: 2.5rem; font-style: italic; margin: 40px 0 10px 0; text-transform: uppercase; letter-spacing: 5px; color: #fff; }
+        .sub-header { color: var(--teal); letter-spacing: 4px; font-weight: 300; margin-bottom: 40px; text-transform: uppercase; font-size: 0.8rem; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; padding: 0 5%; max-width: 1200px; margin: 0 auto 100px auto; }
+        
+        .portal-card { 
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 25px; border-radius: 20px; backdrop-filter: blur(15px);
+            display: flex; flex-direction: column; transition: 0.4s ease;
+        }
+        .portal-card:hover { border-color: var(--teal); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 255, 204, 0.1); }
+
+        /* Video Teaser UI */
+        .video-teaser-box {
+            position: relative; width: 100%; height: 180px; 
+            background-size: cover; background-position: center;
+            border-radius: 12px; cursor: pointer; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+        
+        .play-trigger {
+            width: 50px; height: 50px; background: rgba(0, 255, 204, 0.2); border: 2px solid var(--teal);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 20px var(--teal); animation: pulse 2s infinite;
+        }
+        .play-trigger::after {
+            content: ''; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+            border-left: 14px solid var(--teal); margin-left: 4px;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 255, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+        }
+
+        .btn { 
+            background: #fff; color: #000; padding: 12px; border-radius: 8px;
+            text-decoration: none; font-weight: 900; margin-top: 15px; 
+            cursor: pointer; border: none; text-transform: uppercase; font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .btn:hover { background: var(--teal); transform: scale(1.02); }
+
+        .reward-alert { display: none; background: var(--teal); color: #000; padding: 15px; margin-top: 15px; font-weight: 900; border-radius: 8px; font-size: 0.8rem; }
+
+        /* Social Row */
+        .social-row { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+        .social-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.7rem; transition: 0.3s; }
+        .social-btn:hover { border-color: var(--teal); color: var(--teal); background: rgba(0, 255, 204, 0.05); }
+
+        /* Toast UI */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: var(--teal); color: #000; text-align: center;
+            border-radius: 50px; padding: 16px; position: fixed; z-index: 3000; bottom: 30px; left: 50%;
+            transform: translateX(-50%); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div style="color: var(--teal); font-weight: 900; font-style: italic; letter-spacing: 1px; font-size: 0.9rem;">SOUND SHOP.</div>
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="catalog.html">BEATS</a>
+            <a href="shop.html">GEAR</a>
+            <a href="portal.html" class="lounge-link">LOUNGE</a>
+        </div>
+    </nav>
+
+    <h1>SOUND SHOP PORTAL</h1>
+    <p class="sub-header">Good Business is all we do. Play. Watch. Earn.</p>
+
+    <div class="grid-container">
+        
+        <div class="portal-card">
+            <h3 style="color: var(--teal); margin-top: 0;">THE CINEMA LOUNGE</h3>
+            <p style="font-size: 0.9rem; color: #ccc;">Go "In the Lab" with 25 years of industry experience.</p>
+            
+            <div class="video-teaser-box" style="background-image: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800');" onclick="showToast('Content Unlocking...')">
+                <div class="play-trigger"></div>
+            </div>
+            
+            <p style="font-size: 0.7rem; color: #888; margin-top: 10px; font-style: italic;">Now Streaming: The Art of the Cinematic Build</p>
+            <button class="btn" onclick="showToast('Session Loading...')">Unlock Full Session</button>
+        </div>
+
+        <div class="portal-card">
+            <h3 style="color: var(--teal); margin-top: 0;">SOUND SHOP ARCADE</h3>
+            <p style="font-size: 0.9rem; color: #ccc;">Beat the High Score. Get the Merch Discount.</p>
+            <div style="height: 180px; background: #000; border: 1px solid #222; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <p style="color: #444; font-size: 0.7rem; letter-spacing: 3px;">[ RETRO ENGINE IDLE ]</p>
+            </div>
+            <button class="btn" onclick="showReward()">PLAY TO WIN</button>
+            <div id="reward" class="reward-alert">CLAIMED: 10% OFF MERCH! <br>CODE: SOUND10</div>
+        </div>
+
+        <div class="portal-card">
+            <h3 style="color: var(--teal); margin-top: 0;">THE GUEST LIST</h3>
+            <p style="font-size: 0.9rem; color: #ccc;">Community Vibes & Producer Spotlights.</p>
+            
+            <div class="video-teaser-box" style="background-image: url('https://images.unsplash.com/photo-1571235962067-152f5239a06e?q=80&w=800');" onclick="showToast('Loading Spotlight...')">
+                <div class="play-trigger"></div>
+            </div>
+
+            <p style="font-size: 0.7rem; color: #888; margin-top: 10px; font-style: italic;">Community Spotlight: Next-Gen Rhythm & Soul</p>
+            
+            <div class="social-row">
+                <a href="https://x.com" target="_blank" class="social-btn" onclick="showToast('Opening X...')">X</a>
+                <a href="https://instagram.com" target="_blank" class="social-btn" onclick="showToast('Opening IG...')">IG</a>
+                <a href="https://facebook.com" target="_blank" class="social-btn" onclick="showToast('Opening FB...')">FB</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="toast">Opportunity Unlocked!</div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        function showReward() {
+            document.getElementById('reward').style.display = 'block';
+            showToast('Arcade Reward Claimed!');
+        }
+    </script>
+
+</body>
+</html>

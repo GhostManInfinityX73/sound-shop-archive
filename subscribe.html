@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe | Sound Shop</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ81083J1M">
+</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CQ81083J1M');
+</head>
+<body>
+
+    <section id="subscription-container">
+        <div class="form-card">
+            <h2>Join the Inner Circle</h2>
+            <p>Get the drop on new gear and soundtracks.</p>
+            
+            <form id="sub-form">
+                <div class="input-group">
+                    <label for="user-name">First Name</label>
+                    <input type="text" id="user-name" name="first_name" placeholder="Enter your name" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="user-email">Email Address</label>
+                    <input type="email" id="user-email" name="email" placeholder="email@example.com" required>
+                </div>
+
+                <div class="interest-group">
+                    <p>What are you interested in?</p>
+                    <label><input type="checkbox" name="interest" value="merch"> Merchandise Drops</label><br>
+                    <label><input type="checkbox" name="interest" value="music"> New Music</label>
+                </div>
+
+                <button type="submit" class="submit-btn">Keep Me Posted</button>
+            </form>
+        </div>
+    </section>
+<script>
+    document.getElementById('sub-form').addEventListener('submit', function(e) {
+        e.preventDefault(); // This stops the page from refreshing
+        
+        const formContainer = document.querySelector('.form-card');
+        const name = document.getElementById('user-name').value;
+
+        // Replace the form with a success message
+        formContainer.innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <h2 style="color: #fff;">Got it, ${name}!</h2>
+                <p style="color: #888; margin-top: 10px;">You're officially locked in. Watch your inbox for the next drop.</p>
+                <button onclick="location.reload()" class="submit-btn" style="margin-top: 20px; width: auto; padding: 10px 20px;">Back</button>
+            </div>
+        `;
+    });
+</script>
+
+</body>
+</html>
+

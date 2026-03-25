@@ -1,0 +1,191 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | Sound Shop</title>  
+    <script type="text/javascript" src="https://js.authorize.net/v1/Accept.js" charset="utf-8"></script>                                       
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            margin: 0; padding: 0; font-family: 'Inter', sans-serif;
+            background: #050505; color: #fff; line-height: 1.6;
+            background-image: radial-gradient(circle at top right, #1a1a1a, #050505); background-attachment: fixed;
+        }
+        .checkout-header {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop');                                  
+            background-size: cover; height: 200px; display: flex; align-items: center; justify-content: center;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+        }                                        
+        .checkout-header h1 { font-size: 2.5rem; letter-spacing: 10px; text-transform: uppercase; font-weight: 100; text-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+        .checkout-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; display: flex; gap: 30px; flex-wrap: wrap; }                                        
+        .panel { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(15px); border-radius: 24px; padding: 40px; }
+        .order-summary { flex: 1; min-width: 320px; }                                             
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 300; }                                        
+        .total-row { display: flex; justify-content: space-between; font-size: 1.8rem; font-weight: bold; margin-top: 25px; color: #00ffcc; }
+        .payment-details { flex: 1.5; min-width: 350px; }                                         
+        label { display: block; margin-bottom: 8px; font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 2px; }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 12px; font-family: inherit; }
+        .pay-btn { display: block; width: 100%; padding: 20px; background: #00ffcc; color: #000; border: none; border-radius: 50px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.4s; margin-top: 10px; }
+        .pay-btn:disabled { background: #444; cursor: not-allowed; }
+        
+        /* Highlight for Subscription Mode */
+        .sub-badge { background: rgba(0, 255, 204, 0.1); color: #00ffcc; padding: 5px 15px; border-radius: 20px; font-size: 0.6rem; letter-spacing: 2px; display: none; margin-bottom: 10px; border: 1px solid #00ffcc; }
+    </style>
+</head>
+<body>
+    <div class="checkout-header"><h1>SECURE CHECKOUT</h1></div>
+    <div class="checkout-container">
+        <div class="order-summary panel">
+            <div id="membership-badge" class="sub-badge">RECURRING MEMBERSHIP</div>
+            <h2 id="bag-title" style="font-weight: 300; margin-bottom: 25px; letter-spacing: 2px;">YOUR BAG</h2>
+            <div id="cart-list"></div>
+            <div class="total-row"><span>Total:</span> <span id="final-price">$0.00</span></div>
+        </div>
+        <div class="payment-details panel">
+            <h2 style="font-weight: 300; margin-bottom: 30px; letter-spacing: 2px;">PAYMENT</h2>
+            <form id="paymentForm">
+                <label>Email Address</label>
+                <input type="email" id="customerEmail" placeholder="email@example.com" required>
+
+                <label>Cardholder Name</label>
+                <input type="text" id="cardName" placeholder="Full Name" required>
+
+                <label>Card Number</label>
+                <input type="text" id="cardNumber" placeholder="16-digit card number" required>
+
+                <div style="display:flex; gap:15px">
+                    <div style="flex:1"><label>Exp Month</label><input type="text" id="expMonth" placeholder="MM" maxlength="2" required></div>
+                    <div style="flex:1"><label>Exp Year</label><input type="text" id="expYear" placeholder="YY" maxlength="2" required></div>
+                    <div style="flex:1"><label>CVC</label><input type="text" id="cardCode" placeholder="123" maxlength="4" required></div>
+                </div>
+
+                <button type="button" class="pay-btn" id="submitBtn" onclick="sendPaymentToAuthorize()">AUTHORIZE PAYMENT</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const isSubscription = params.get('plan') === 'pro';
+
+    window.onload = function() {
+        const listDiv = document.getElementById('cart-list');
+        const priceDiv = document.getElementById('final-price');
+        const btn = document.getElementById('submitBtn');
+
+        if (isSubscription) {
+            // Setup for Pro Membership
+            document.getElementById('membership-badge').style.display = 'inline-block';
+            document.getElementById('bag-title').innerText = "SUBSCRIPTION";
+            listDiv.innerHTML = `<div class="cart-item"><span>Pro Membership (Monthly)</span><span>$19.99</span></div>`;
+            priceDiv.innerText = "$19.99";
+            btn.innerText = "START MEMBERSHIP";
+        } else {
+            // Setup for Shop Gear (Hoodies, etc)
+            const cartData = JSON.parse(localStorage.getItem('soundShopCart')) || [];
+            let total = 0;
+            if(cartData.length === 0) {
+                listDiv.innerHTML = "<p style='color:#888'>Your bag is empty.</p>";
+            } else {
+                cartData.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `<span>${item.name}</span><span>$${parseFloat(item.price).toFixed(2)}</span>`;
+                    listDiv.appendChild(itemDiv);
+                    total += parseFloat(item.price);
+                });
+            }
+            priceDiv.innerText = "$" + total.toFixed(2);
+        }
+    };
+
+    function sendPaymentToAuthorize() {
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "ENCRYPTING...";
+        btn.disabled = true;
+
+        const authData = {
+            clientKey: "8C3a2e9HvtZF5v9zn7H6gtr93Z4rxEaRJjQsdZy54j795DjN77Dt5JzrLnjX4Wd2",
+            apiLoginID: "43cLv2Jb"
+        };
+
+        const cardData = {
+            cardNumber: document.getElementById("cardNumber").value.replace(/\s+/g, ''),
+            month: document.getElementById("expMonth").value,
+            year: document.getElementById("expYear").value,
+            cardCode: document.getElementById("cardCode").value,
+            fullName: document.getElementById("cardName").value
+        };
+
+        Accept.dispatchData({ authData, cardData }, responseHandler);
+    }
+
+    function responseHandler(response) {
+        if (response.messages.resultCode === "Error") {
+            alert("Error: " + response.messages.message[0].text);
+            resetButton();
+        } else {
+            processFinalPayment(response.opaqueData);
+        }
+    }
+
+    function processFinalPayment(opaqueData) {
+        const email = document.getElementById('customerEmail').value;
+        const name = document.getElementById('cardName').value;
+        const total = document.getElementById('final-price').innerText.replace('$', '');
+        
+        // This is where we decide which route to hit
+        const endpoint = isSubscription ? '/subscribe' : '/checkout';
+        const backendUrl = `http://localhost:3000${endpoint}`;
+
+        const payload = {
+            opaqueData: {
+                dataDescriptor: opaqueData.dataDescriptor,
+                dataValue: opaqueData.dataValue
+            },
+            customerEmail: email,
+            customerName: name, // Required for Subscription route
+            amount: total,
+            trackName: isSubscription ? "Pro Membership" : "Shop Gear"
+        };
+
+        fetch(backendUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (!isSubscription) localStorage.removeItem('soundShopCart');
+                window.location.href = `thank-you.html?email=${encodeURIComponent(email)}&id=${data.transactionId || data.subscriptionId}`;
+            } else {
+                alert("Processing Error: " + data.error);
+                resetButton();
+            }
+        })
+        .catch(err => {
+            alert("Engine Offline. Check connection.");
+            resetButton();
+        });
+    }
+
+    function resetButton() {
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = isSubscription ? "START MEMBERSHIP" : "AUTHORIZE PAYMENT";
+        btn.disabled = false;
+    }
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Vault Access | Sound Shop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #020202; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+
+        /* Background Engine */
+        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(500px) rotateX(60deg) translateY(-100px); transform-origin: top; animation: gridMove 20s linear infinite; z-index: -2; }
+        @keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 100%; } }
+
+        .signup-card {
+            text-align: center; padding: 60px; background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 40px;
+            backdrop-filter: blur(25px); max-width: 500px; width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); position: relative;
+        }
+
+        /* --- THE NEW "FREE" BADGE --- */
+        .free-badge {
+            display: inline-block; padding: 6px 20px; border: 1px solid #00ffcc;
+            border-radius: 50px; color: #00ffcc; font-size: 0.65rem;
+            font-weight: 700; letter-spacing: 3px; margin-bottom: 25px;
+            text-transform: uppercase; background: rgba(0, 255, 204, 0.05);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+        }
+
+        h1 { font-weight: 100; letter-spacing: 12px; margin-bottom: 20px; text-transform: uppercase; font-size: 2.2rem; }
+        h1 b { color: #00ffcc; font-weight: 700; }
+        
+        p { color: #888; font-weight: 300; margin-bottom: 40px; line-height: 1.6; font-size: 0.9rem; }
+
+        input {
+            width: 100%; padding: 22px; margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px; color: #fff; text-align: center; font-size: 1rem;
+            outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: #00ffcc; background: rgba(0, 255, 204, 0.02); }
+
+        .submit-btn {
+            width: 100%; padding: 22px; border-radius: 50px; border: none;
+            background: #fff; color: #000; font-weight: 900;
+            letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
+            transition: 0.3s;
+        }
+        .submit-btn:hover { background: #00ffcc; box-shadow: 0 0 30px rgba(0, 255, 204, 0.6); transform: translateY(-3px); }
+        
+        .no-card { margin-top: 15px; font-size: 0.6rem; color: #555; letter-spacing: 1px; text-transform: uppercase; }
+        
+        .back-link { margin-top: 30px; display: block; color: #444; text-decoration: none; font-size: 0.7rem; letter-spacing: 2px; }
+        .back-link:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <div class="signup-card">
+        <div class="free-badge">Lifetime Free Access</div>
+        
+        <h1>THE <b>VAULT</b></h1>
+        <p>Unlock our cinematic library, drum kits, and studio updates. 100% free for independent creators.</p>
+        
+        <form id="freeSignupForm">
+            <input type="email" id="freeEmail" placeholder="YOUR BEST EMAIL ADDRESS" required>
+            <button type="submit" class="submit-btn" id="signupBtn">CLAIM FREE ACCESS</button>
+            <div class="no-card">No Credit Card Required • Instant Activation</div>
+        </form>
+
+        <a href="index.html" class="back-link">RETURN TO SHOP</a>
+    </div>
+
+    <script>
+        document.getElementById('freeSignupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('freeEmail').value;
+            const btn = document.getElementById('signupBtn');
+            
+            btn.innerText = "OPENING VAULT...";
+            btn.disabled = true;
+
+            // Updated to your local server
+            fetch('http://localhost:3000/free-signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    // Redirect to the thank you page with a specific "free" flag
+                    window.location.href = `thank-you.html?email=${encodeURIComponent(email)}&status=free`;
+                } else {
+                    alert("Vault Error: " + (data.error || "Please try again later."));
+                    btn.innerText = "CLAIM FREE ACCESS";
+                    btn.disabled = false;
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Engine Offline. Ensure your Node.js server is running in Termux.");
+                btn.innerText = "CLAIM FREE ACCESS";
+                btn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
+

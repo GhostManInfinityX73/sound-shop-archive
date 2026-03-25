@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>                                               
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">                            
+    <title>The Vault | Sound Shop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;700&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {                                               
+            margin: 0; padding: 0; font-family: 'Inter', sans-serif;                                          
+            background: #020202; color: #ffffff; overflow-x: hidden;
+        }                                        
+
+        /* --- THE "ALIVE" BACKGROUND ENGINE --- */
+        .grid-bg {                                           
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);                                                            
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px);
+            transform-origin: top;
+            animation: gridMove 20s linear infinite; z-index: -2;
+        }                                        
+        @keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 100%; } }                                        
+
+        .orb {                                               
+            position: fixed; width: 400px; height: 400px;                     
+            background: radial-gradient(circle, rgba(0, 255, 204, 0.07) 0%, transparent 70%);
+            border-radius: 50%; filter: blur(50px); z-index: -1;                                     
+            animation: orbFloat 15s infinite alternate ease-in-out;                                       
+        }
+        .orb-1 { top: -10%; left: -10%; }                
+        .orb-2 { bottom: -10%; right: -10%; animation-delay: -7s; }                               
+        @keyframes orbFloat { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(100px, 50px) scale(1.2); } }                                        
+
+        /* --- NAVIGATION --- */
+        nav {                                                
+            padding: 25px 50px; background: rgba(0, 0, 0, 0.85);                                              
+            display: flex; justify-content: space-between; align-items: center;                               
+            border-bottom: 1px solid rgba(0, 255, 204, 0.2); position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(25px);                 
+        }
+        .logo { font-weight: 100; letter-spacing: 8px; font-size: 1.2rem; }                               
+        .logo b { color: #00ffcc; font-weight: 700; text-shadow: 0 0 15px #00ffcc; }              
+
+        /* --- PRODUCT CARDS --- */
+        .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+                                                         
+        .product-card {
+            background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.05);                                                      
+            border-radius: 30px; padding: 30px; text-align: center; position: relative;
+            overflow: hidden; transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+        }                                        
+        .product-card:hover {
+            background: rgba(255, 255, 255, 0.03); border-color: #00ffcc;                           
+            transform: translateY(-15px) scale(1.02); box-shadow: 0 20px 50px rgba(0, 255, 204, 0.15);                                              
+        }
+                                                         
+        .product-img { width: 100%; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.5s; }                                                
+        .product-card:hover .product-img { transform: rotate(-2deg) scale(1.05); }                
+        
+        .price-tag { font-size: 1.8rem; font-weight: 100; color: #00ffcc; margin: 15px 0; display: block; }                                        
+
+        .add-btn {
+            width: 100%; padding: 18px; border-radius: 50px; border: none;
+            background: #fff; color: #000; font-weight: 900; letter-spacing: 2px;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+        }                                                         
+        .add-btn:hover { background: #00ffcc; box-shadow: 0 0 30px rgba(0, 255, 204, 0.6); }                                        
+
+        #cartBtn {
+            cursor:pointer; color: #00ffcc; border: 1px solid #00ffcc;
+            padding: 10px 25px; border-radius: 50px; font-weight: 700;
+            background: transparent; transition: 0.3s; animation: pulse-border 2s infinite;         
+        }
+        @keyframes pulse-border { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(0, 255, 204, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); } }                                        
+    </style>                                         
+</head>                                          
+<body>
+    <div class="grid-bg"></div>
+    <div class="orb orb-1"></div>                    
+    <div class="orb orb-2"></div>
+
+    <nav>
+        <div class="logo">SOUND<b>SHOP</b></div>         
+        <div style="display: flex; align-items: center; gap: 30px;">                                          
+            <a href="index.html" style="color: #666; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">BACK</a>
+            <div id="cartBtn" onclick="location.href='checkout.html'">
+                BAG [<span id="cartCount">0</span>]          
+            </div>
+        </div>                                       
+    </nav>
+
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 80px;">
+            <h1 style="font-weight: 100; font-size: 4rem; letter-spacing: 15px; margin-bottom: 10px;">THE VAULT</h1>                                           
+            <p style="color: #00ffcc; letter-spacing: 5px; text-transform: uppercase; font-size: 0.7rem;">Limited Edition Hardware & Threads</p>
+        </div>                                       
+        
+        <div class="product-grid">                           
+            <div class="product-card">
+                <img src="images/blkh.jpeg" alt="Legacy Hoodie" class="product-img">
+                <h2 style="font-weight: 300; margin-bottom: 5px;">LEGACY HOODIE</h2>
+                <p style="color: #555; font-size: 0.7rem; letter-spacing: 1px;">HEAVYWEIGHT STUDIO COTTON</p>                                                      
+                <span class="price-tag">$55.00</span>
+                <button class="add-btn" onclick="addToCart('Legacy Hoodie', 55.00)">Add to Bag</button>
+            </div>
+            
+            <div class="product-card">
+                <img src="images/agh.jpeg" alt="White Hoodie" class="product-img">                                
+                <h2 style="font-weight: 300; margin-bottom: 5px;">WHITE EDITION</h2>
+                <p style="color: #555; font-size: 0.7rem; letter-spacing: 1px;">LIMITED RELEASE // WINTER 26</p>                                                   
+                <span class="price-tag">$85.00</span>
+                <button class="add-btn" onclick="addToCart('White Hoodie', 85.00)">Add to Bag</button>
+            </div>                                       
+        </div>
+    </div>                                           
+
+    <footer style="text-align: center; padding: 100px; opacity: 0.3; font-size: 0.6rem; letter-spacing: 5px;">                                             
+        SOUND SHOP // FAYETTEVILLE NC // 2026
+    </footer>
+
+    <script>                                             
+        let cart = JSON.parse(localStorage.getItem('soundShopCart')) || [];                               
+        document.getElementById('cartCount').innerText = cart.length;                                 
+        
+        function addToCart(name, price) {                    
+            // Store item in cart
+            cart.push({ name, price });
+            localStorage.setItem('soundShopCart', JSON.stringify(cart));
+            
+            // Update UI count
+            document.getElementById('cartCount').innerText = cart.length;
+            
+            // Visual Button Feedback
+            const btn = event.target;                        
+            const originalText = btn.innerText;
+            btn.innerText = "ADDED TO BAG";
+            btn.style.background = "#00ffcc";                
+            
+            setTimeout(() => {
+                btn.innerText = originalText;                    
+                btn.style.background = "#fff";
+            }, 2000);                                    
+        }
+    </script>                                        
+</body>                                          
+</html>
+

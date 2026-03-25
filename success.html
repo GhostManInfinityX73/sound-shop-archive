@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Confirmed | Sound Shop</title>
+    <style>
+        body { 
+            margin: 0; padding: 20px; font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(-45deg, #052c14, #0a192f, #1b4d3e, #4b3f0b); 
+            background-size: 400% 400%; animation: gradientBG 12s ease infinite; 
+            color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh;
+            text-align: center;
+        }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .container {
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(15px);
+            padding: 50px; border-radius: 30px;
+            border: 2px solid #ffcc00; 
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.25);
+            max-width: 500px;
+        }
+
+        h1 { color: #ffcc00; text-transform: uppercase; letter-spacing: 5px; text-shadow: 0 0 15px rgba(255,204,0,0.5); margin-top: 0; }
+        .ethic-tag { color: #2ecc71; font-style: italic; font-size: 0.9rem; margin-bottom: 20px; letter-spacing: 1px; }
+        
+        p { color: #eee; line-height: 1.6; }
+
+        .download-btn {
+            display: inline-block; margin-top: 25px;
+            background: #ffcc00; 
+            color: #000; padding: 15px 40px; text-decoration: none;
+            font-weight: 900; border-radius: 50px; text-transform: uppercase;
+            transition: 0.3s;
+            opacity: 0.7;
+            cursor: default;
+        }
+
+        /* This class is added via JavaScript once the payment is verified */
+        .download-btn.ready { 
+            background: #2ecc71 !important; 
+            opacity: 1 !important; 
+            cursor: pointer !important; 
+        }
+
+        .download-btn.ready:hover { box-shadow: 0 0 20px #2ecc71; transform: scale(1.05); background: #fff; }
+
+        #status-msg { font-size: 0.95rem; color: #ffcc00; margin-top: 20px; font-weight: bold; }
+        #order-id { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 25px; font-family: monospace; }
+        .back-home { display: block; margin-top: 30px; color: #ffcc00; text-decoration: none; font-size: 0.9rem; font-weight: bold; }
+        .back-home:hover { text-decoration: underline; }
+    </style>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ81083J1M"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CQ81083J1M');
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Verified</h1>
+        <div class="ethic-tag">"Good business is the only business we do."</div>
+        
+        <p>Your transaction was successful. Your high-quality audio file is being prepared for download.</p>
+        
+        <a href="#" id="downloadLink" class="download-btn">Awaiting System</a>
+        
+        <div id="status-msg">Verifying secure purchase...</div>
+        <p id="order-id"></p>
+        
+        <a href="/" class="back-home">Return to Sound Shop Home</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            const transId = urlParams.get('transactionId'); 
+            const trackFile = urlParams.get('file');
+
+            const linkElem = document.getElementById('downloadLink');
+            const statusElem = document.getElementById('status-msg');
+            const orderIdElem = document.getElementById('order-id');
+
+            if (transId) {
+                orderIdElem.innerText = "TRANSACTION_ID: " + transId;
+                statusElem.innerText = "Payment Verified & Secured.";
+                statusElem.style.color = "#2ecc71";
+            }
+
+            if (trackFile) {
+                // Adjust this path if your audio files are in a different folder
+                const downloadUrl = `audio/${trackFile}`; 
+                
+                linkElem.href = downloadUrl;
+                linkElem.setAttribute('download', trackFile);
+                linkElem.innerText = "Download Your Track Now";
+                linkElem.classList.add('ready');
+                
+                statusElem.innerText = "✅ Your high-quality file is ready.";
+
+                // Automatic download trigger
+                setTimeout(() => {
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = trackFile;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }, 3000);
+            } else {
+                linkElem.innerText = "Check Email for Link";
+            }
+        });
+    </script>
+</body>
+</html>
+

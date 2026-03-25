@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOUND SHOP | Premium Audio Infrastructure</title>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ81083J1M"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CQ81083J1M');
+    </script>
+
+    <script type="text/javascript" src="https://jstest.authorize.net/v1/Accept.js" charset="utf-8"></script>
+    
+    <style>
+        :root { --teal: #00ffcc; --dark: #050505; --glass: rgba(255, 255, 255, 0.08); --netflix: #e50914; }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; background: var(--dark); color: #fff; margin: 0; padding: 0;
+            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover; background-attachment: fixed; background-position: center;
+        }
+
+        /* Navigation */
+        nav { width: 100%; display: flex; justify-content: space-around; padding: 20px 0; background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0, 255, 204, 0.2); backdrop-filter: blur(10px); align-items: center; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; margin: 0 10px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.7; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--teal); }
+        .lounge-link { border: 1px solid rgba(0, 255, 204, 0.3); padding: 4px 8px; border-radius: 4px; color: var(--teal) !important; opacity: 1 !important; }
+
+        .hero { text-align: center; padding: 60px 20px 20px 20px; }
+        .hero h1 { font-size: 3.5rem; font-style: italic; margin: 0; text-transform: uppercase; letter-spacing: 5px; line-height: 1; }
+        
+        /* Video Hub / Portal Styles */
+        .media-hub { padding: 60px 20px; max-width: 1100px; margin: 0 auto; }
+        .experience-header { text-align: center; margin-bottom: 40px; }
+        .experience-header h1 { font-size: 2.5rem; letter-spacing: -1px; line-height: 1; margin: 0; }
+        .experience-header p { color: var(--teal); letter-spacing: 5px; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 10px; }
+        
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .video-card { background: var(--glass); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; backdrop-filter: blur(10px); }
+        .video-card:hover { transform: translateY(-10px); border-color: var(--teal); }
+        .video-preview { height: 200px; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .play-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: var(--teal); opacity: 0.7; }
+        .video-info { padding: 20px; }
+        .video-info h3 { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin: 0 0 5px 0; }
+        .video-info p { font-size: 0.7rem; color: #888; margin-bottom: 15px; }
+
+        .stream-link { 
+            display: inline-block; color: var(--netflix); text-decoration: none; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: 1px solid var(--netflix); padding: 8px 15px; border-radius: 5px; transition: 0.3s;
+        }
+        .stream-link:hover { background: var(--netflix); color: white; }
+
+        /* Existing Studio Section (YouTube) */
+        .video-wrapper { width: 90%; max-width: 850px; margin: 40px auto; border: 2px solid var(--teal); border-radius: 20px; overflow: hidden; box-shadow: 0 0 40px rgba(0, 255, 204, 0.25); }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        /* Track Container */
+        .track-container { width: 95%; max-width: 700px; margin: 40px auto; }
+        .track-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 24px; backdrop-filter: blur(20px); margin-bottom: 30px; }
+        .visualizer { display: flex; gap: 4px; height: 15px; align-items: flex-end; margin-bottom: 15px; }
+        .bar { width: 4px; background: var(--teal); border-radius: 2px; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { from { height: 4px; } to { height: 18px; } }
+        audio { width: 100%; filter: invert(100%) hue-rotate(180deg) brightness(1.5); margin: 20px 0; }
+        
+        .buy-btn { background: linear-gradient(90deg, #00ffcc, #00c6ff); color: #000; border: none; padding: 18px; width: 100%; border-radius: 50px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 1rem; transition: 0.3s; }
+        
+        #paymentModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:2000; justify-content:center; align-items:center; }
+        .modal-content { background:#111; border:2px solid var(--teal); padding:35px; border-radius:28px; width:90%; max-width:400px; }
+        input { width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #333; background:#1a1a1a; color:#fff; font-size: 16px; box-sizing: border-box; }
+        
+        .story-section { max-width: 800px; margin: 50px auto; padding: 20px; line-height: 1.8; color: #ccc; text-align: center; }
+        .highlight { color: var(--teal); font-weight: bold; }
+        
+        #toast { visibility: hidden; min-width: 250px; background-color: var(--teal); color: #000; text-align: center; border-radius: 50px; padding: 16px; position: fixed; z-index: 3000; bottom: 30px; left: 50%; transform: translateX(-50%); font-weight: bold; text-transform: uppercase; }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div style="color: var(--teal); font-weight: 900; font-style: italic; letter-spacing: 1px; font-size: 0.9rem;">SOUND SHOP.</div>
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="catalog.html">BEATS</a>
+            <a href="shop.html">GEAR</a>
+            <a href="portal.html" class="lounge-link">LOUNGE</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1 id="main-header">THE SOUND SHOP</h1>
+        <p style="color: var(--teal); letter-spacing: 6px; font-weight: 300;">PREMIUM AUDIO INFRASTRUCTURE</p>
+    </header>
+
+    <section class="video-wrapper">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/GjZ_59hCrx0" title="Sound Shop Studio Vision" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <section class="media-hub">
+        <div class="experience-header">
+            <p>STUDIO ACCESS</p>
+            <h1>ENTERTAINMENT PORTAL.</h1>
+        </div>
+
+        <div class="video-grid">
+            <div class="video-card">
+                <div class="video-preview" style="background-image: url('https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?q=80&w=2070&auto=format&fit=crop');">
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="video-info">
+                    <h3>CINEMATIC REEL 2026</h3>
+                    <p>Exclusive production highlights.</p>
+                </div>
+            </div>
+
+            <div class="video-card external">
+                <div class="video-preview" style="background: #e50914; display: flex; align-items: center; justify-content: center;">
+                    <h2 style="letter-spacing: 5px; color: white;">NETFLIX</h2>
+                </div>
+                <div class="video-info">
+                    <h3>OFFICIAL PLACEMENTS</h3>
+                    <p>Browse our tracks featured on streaming.</p>
+                    <a href="https://www.netflix.com" target="_blank" class="stream-link">WATCH ON NETFLIX</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="product-container" class="track-container"></div>
+
+    <section class="story-section">
+        <h2 style="color: #fff; text-transform: uppercase; letter-spacing: 4px;">25 Years in Sound</h2>
+        <p>Sound Shop is the outcome of a <span class="highlight">quarter-century pursuit</span> of atmospheric perfection. Engineered to turn a visual scene into a cinematic event.</p>
+    </section>
+
+    <div id="paymentModal">
+        <div class="modal-content">
+            <h3 id="modalTrackName" style="color:var(--teal); margin-top:0; font-style: italic;">Item Name</h3>
+            <p id="modalPrice" style="font-weight: 900; font-size: 1.4rem;">$0.00</p>
+            <input type="email" id="customerEmail" placeholder="Email for Delivery">
+            <input type="tel" id="cardNumber" placeholder="Card Number">
+            <div style="display:flex; gap:10px;">
+                <input type="tel" id="expMonth" placeholder="MM" maxlength="2">
+                <input type="tel" id="expYear" placeholder="YY" maxlength="2">
+                <input type="tel" id="cardCode" placeholder="CVV" maxlength="4">
+            </div>
+            <button class="buy-btn" id="payBtn" onclick="sendPayment()">Complete Secure Purchase</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#666; width:100%; margin-top:20px; cursor:pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <div id="toast">Action Complete</div>
+
+    <script>
+        // Track list for the homepage featured section
+        const defaultTracks = [
+            { title: 'Holding Heavy Weight', price: 29.99, file: 'holdenhw.m4a', sku: 'SKU-HHW' },
+            { title: 'Grudge Gobbler', price: 19.99, file: 'tgg.m4a', sku: 'SKU-TGG' },
+            { title: 'The Rumbler', price: 24.99, file: 'rumbler.m4a', sku: 'SKU-RUM' }
+        ];
+
+        let currentOrder = {};
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        async function loadCatalog() {
+            const container = document.getElementById('product-container');
+            if (!container) return;
+            let products = defaultTracks; 
+            try {
+                const response = await fetch('/api/catalog');
+                if (response.ok) {
+                    const dbProducts = await response.json();
+                    if (dbProducts && dbProducts.length > 0) products = dbProducts;
+                }
+            } catch (err) { console.log("Static Mode Active"); }
+
+            container.innerHTML = products.map(track => {
+                const title = track.title || track.name;
+                return `
+                <div class="track-card">
+                    <div class="visualizer"><div class="bar"></div><div class="bar" style="animation-delay:0.2s"></div><div class="bar" style="animation-delay:0.4s"></div></div>
+                    <h2 style="margin:0; color:var(--teal); font-style: italic;">${title}</h2>
+                    <audio controls><source src="${track.file}" type="audio/mp4"></audio>
+                    <button class="buy-btn" onclick="openModal('${title}', '${track.price}', '${track.sku}')">
+                        SECURE LICENSE - $${track.price}
+                    </button>
+                </div>`;
+            }).join('');
+        }
+
+        function openModal(name, price, sku) {
+            currentOrder = { name, price, sku };
+            document.getElementById('modalTrackName').innerText = name;
+            document.getElementById('modalPrice').innerText = '$' + price;
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('paymentModal').style.display = 'none'; }
+
+        function sendPayment() {
+            const btn = document.getElementById('payBtn');
+            btn.innerText = "ENCRYPTING..."; btn.disabled = true;
+            const authData = { clientKey: "8C3a2e9HvtZF5v9zn7H6gtr93Z4rxEaRJjQsdZy54j795DjN77Dt5JzrLnjX4Wd2", apiLoginID: "43cLv2Jb" };
+            const cardData = {
+                cardNumber: document.getElementById("cardNumber").value.replace(/\s+/g, ''),
+                month: document.getElementById("expMonth").value,
+                year: document.getElementById("expYear").value,
+                cardCode: document.getElementById("cardCode").value
+            };
+            if (typeof Accept === "undefined") {
+                showToast("Payment Gateway Offline.");
+                btn.disabled = false; btn.innerText = "Complete Secure Purchase"; return;
+            }
+            Accept.dispatchData({ authData, cardData }, (response) => {
+                if (response.messages.resultCode === "Error") {
+                    showToast(response.messages.message[0].text);
+                    btn.innerText = "Complete Secure Purchase"; btn.disabled = false;
+                } else {
+                    processCheckout(response.opaqueData);
+                }
+            });
+        }
+
+        async function processCheckout(opaqueData) {
+            try {
+                const res = await fetch('/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        opaqueData: { dataDescriptor: opaqueData.dataDescriptor, dataValue: opaqueData.dataValue },
+                        trackName: currentOrder.name,
+                        amount: currentOrder.price,
+                        customerEmail: document.getElementById("customerEmail").value
+                    })
+                });
+                const result = await res.json();
+                if (result.success) window.location.href = "success.html";
+                else showToast("Error: " + result.error);
+            } catch (err) { showToast("Checkout engine error."); }
+            document.getElementById('payBtn').disabled = false;
+        }
+
+        window.onload = loadCatalog;
+    </script>
+</body>
+</html>
