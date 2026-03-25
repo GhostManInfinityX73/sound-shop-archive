@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OUR STORY | Sound Shop</title>
+    <style>
+        :root { --teal: #00ffcc; --dark: #050505; --glass: rgba(255, 255, 255, 0.05); }
+        body { 
+            background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; line-height: 1.8; margin: 0;
+            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover; background-attachment: fixed;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 80px 20px; }
+        .header-section { text-align: center; margin-bottom: 60px; }
+        .header-section h1 { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; margin: 0; }
+        .header-section p { color: var(--teal); text-transform: uppercase; letter-spacing: 8px; font-size: 0.8rem; }
+
+        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-top: 50px; }
+        .story-text h2 { color: var(--teal); font-style: italic; font-size: 1.8rem; }
+        .story-image { 
+            width: 100%; border-radius: 20px; border: 1px solid var(--teal); 
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2); 
+        }
+
+        .stats-bar { display: flex; justify-content: space-around; background: var(--glass); padding: 30px; border-radius: 20px; margin: 50px 0; border: 1px solid rgba(255,255,255,0.1); }
+        .stat-item { text-align: center; }
+        .stat-item h3 { font-size: 2rem; color: var(--teal); margin: 0; }
+        .stat-item p { font-size: 0.7rem; letter-spacing: 3px; margin: 0; opacity: 0.7; }
+
+        /* Navigation Buttons */
+        .social-links { text-align: center; margin-top: 60px; }
+        .social-links a { 
+            color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); 
+            padding: 10px 25px; border-radius: 50px; font-size: 0.7rem; letter-spacing: 3px; 
+            margin: 10px; transition: 0.3s; display: inline-block;
+            background: transparent;
+        }
+        .social-links a:hover { border-color: var(--teal); color: var(--teal); background: rgba(0,255,204,0.1); box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); }
+
+        @media (max-width: 768px) { .story-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <p>THE LEGACY</p>
+        <h1>25 YEARS <br> IN SOUND.</h1>
+    </div>
+
+    <div class="story-grid">
+        <div class="story-text">
+            <h2>The Fayetteville Roots</h2>
+            <p>Born in the 910, Sound Shop is the outcome of a quarter-century pursuit of atmospheric perfection. Established in 2001, we’ve spent decades evolving from analog grit to digital precision.</p>
+            <p>Our philosophy is built on three pillars: <strong>Culinary Ear</strong>, <strong>Carpentry Structure</strong>, and <strong>Cinematic Vision</strong>.</p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop" alt="Studio Setup" class="story-image">
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-item"><h3>2001</h3><p>ESTABLISHED</p></div>
+        <div class="stat-item"><h3>25</h3><p>YEARS EXP</p></div>
+        <div class="stat-item"><h3>100%</h3><p>INDEPENDENT</p></div>
+    </div>
+
+    <div class="story-text" style="text-align: center;">
+        <h2>The Infrastructure</h2>
+        <p>We operate on a mobile-centric, high-performance workflow. Every track in our catalog is engineered to be a "narrative driver"—music that doesn't just play, but tells a story.</p>
+    </div>
+
+    <div class="social-links">
+        <a href="https://github.com/GhostManInfinityX73/sound-shop-archive" target="_blank">GITHUB ARCHIVE</a>
+        <a href="https://youtube.com/@ghostmanx7326?si=3sVVQsAcYdiJsJ6b" target="_blank">YOUTUBE STUDIO</a>
+        <a href="catalog.html">BROWSE CATALOG</a>
+        <a href="index.html">RETURN HOME</a>
+    </div>
+</div>
+
+</body>
+</html>

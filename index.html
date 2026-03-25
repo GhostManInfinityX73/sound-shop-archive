@@ -34,7 +34,7 @@
         .hero { text-align: center; padding: 60px 20px 20px 20px; }
         .hero h1 { font-size: 3.5rem; font-style: italic; margin: 0; text-transform: uppercase; letter-spacing: 5px; line-height: 1; }
         
-        /* Video Hub / Portal Styles */
+        /* Video Hub */
         .media-hub { padding: 60px 20px; max-width: 1100px; margin: 0 auto; }
         .experience-header { text-align: center; margin-bottom: 40px; }
         .experience-header h1 { font-size: 2.5rem; letter-spacing: -1px; line-height: 1; margin: 0; }
@@ -54,12 +54,11 @@
         }
         .stream-link:hover { background: var(--netflix); color: white; }
 
-        /* Existing Studio Section (YouTube) */
         .video-wrapper { width: 90%; max-width: 850px; margin: 40px auto; border: 2px solid var(--teal); border-radius: 20px; overflow: hidden; box-shadow: 0 0 40px rgba(0, 255, 204, 0.25); }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        /* Track Container */
+        /* Track Styles */
         .track-container { width: 95%; max-width: 700px; margin: 40px auto; }
         .track-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 24px; backdrop-filter: blur(20px); margin-bottom: 30px; }
         .visualizer { display: flex; gap: 4px; height: 15px; align-items: flex-end; margin-bottom: 15px; }
@@ -161,10 +160,9 @@
     <div id="toast">Action Complete</div>
 
     <script>
-        // Track list for the homepage featured section
         const defaultTracks = [
             { title: 'Holding Heavy Weight', price: 29.99, file: 'holdenhw.m4a', sku: 'SKU-HHW' },
-            { title: 'Grudge Gobbler', price: 19.99, file: 'tgg.m4a', sku: 'SKU-TGG' },
+            { title: 'Grudge Gobbler', price: 14.99, file: 'tgg.m4a', sku: 'SKU-TGG' },
             { title: 'The Rumbler', price: 24.99, file: 'rumbler.m4a', sku: 'SKU-RUM' }
         ];
 
@@ -174,28 +172,42 @@
             const toast = document.getElementById("toast");
             toast.innerText = message;
             toast.className = "show";
-            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
         }
 
         async function loadCatalog() {
             const container = document.getElementById('product-container');
             if (!container) return;
             let products = defaultTracks; 
+            
             try {
                 const response = await fetch('/api/catalog');
                 if (response.ok) {
                     const dbProducts = await response.json();
-                    if (dbProducts && dbProducts.length > 0) products = dbProducts;
+                    if (dbProducts && dbProducts.length > 0) {
+                        products = dbProducts.map(p => {
+                            if (p.price === 19.99) p.price = 14.99;
+                            return p;
+                        });
+                    }
                 }
-            } catch (err) { console.log("Static Mode Active"); }
+            } catch (err) { console.log("Archive Static Mode Active"); }
 
             container.innerHTML = products.map(track => {
                 const title = track.title || track.name;
                 return `
                 <div class="track-card">
-                    <div class="visualizer"><div class="bar"></div><div class="bar" style="animation-delay:0.2s"></div><div class="bar" style="animation-delay:0.4s"></div></div>
+                    <div class="visualizer">
+                        <div class="bar"></div>
+                        <div class="bar" style="animation-delay:0.2s"></div>
+                        <div class="bar" style="animation-delay:0.4s"></div>
+                    </div>
                     <h2 style="margin:0; color:var(--teal); font-style: italic;">${title}</h2>
-                    <audio controls><source src="${track.file}" type="audio/mp4"></audio>
+                    <audio controls controlsList="nodownload">
+                        <source src="${track.file}" type="audio/x-m4a">
+                        <source src="${track.file}" type="audio/mp4">
+                        Your browser does not support the audio.
+                    </audio>
                     <button class="buy-btn" onclick="openModal('${title}', '${track.price}', '${track.sku}')">
                         SECURE LICENSE - $${track.price}
                     </button>
@@ -259,3 +271,7 @@
     </script>
 </body>
 </html>
+
+
+
+
